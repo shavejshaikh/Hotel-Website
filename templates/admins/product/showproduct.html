@@ -1,0 +1,92 @@
+{% extends "index.html" %}
+{% block content %}
+{% load static %}
+
+<link href="{% static '/css/call.css' %}" rel="stylesheet">
+
+<div class="table-responsive">
+<button class="toggle btn btn-primary" style="margin-bottom: 20px;"><i class="fas fa-fw fa fa-sliders" style="font-size:20px"></i>Filter</button>
+  <form id="target" method="get">
+    
+    <div  class="well" style="padding: 10px; border:1px solid #e3e6f0 ;color: #858796;">
+      <h4 style="margin-top: 0">Product</h4>
+      <div class="row">
+
+        <div class="form-group col-sm-4 col-md-3">
+          Product Name <br>{{ myFilter.form.product_name }}{{ myFilter.form.product_name.errors }}
+        </div>
+
+        <div class="form-group col-sm-4 col-md-3">
+          Serial No <br>{{ myFilter.form.serial_no }}{{ myFilter.form.serial_no.errors }}
+        </div>
+
+        <div class="form-group col-sm-4 col-md-3">
+          Model No <br>{{ myFilter.form.model_no }}{{ myFilter.form.model_no.errors}}
+        </div>
+
+        <div class="form-group col-sm-4 col-md-3">
+          Ram <br>{{ myFilter.form.ram }}{{ myFilter.form.ram.errors }}
+        </div>
+
+        <div class="form-group col-sm-4 col-md-3">
+          Device Type <br>{{ myFilter.form.device_type}}{{ myFilter.form.device_type.errors }}
+        </div>
+
+        <div class="form-group col-sm-4 col-md-3">
+          Active <br>{{ myFilter.form.active }}{{ myFilter.form.active.errors}}
+        </div>
+    
+      </div>
+
+      <button type="submit" class="btn btn-primary">
+        <span class="glyphicon glyphicon-search"></span> Search
+      </button>
+
+    </div>
+  </form>
+  <table class="table table-striped table-bordered table-sm">
+      <thead class="thead-dark">
+          <tr>
+              <th>DEVICE NAME</th>
+              <th>SERIAL NO</th>
+              <th>MODEL NO</th>
+              <th>MAC ADDRESS</th>
+              <th>DEVICE TYPE</th>
+              <th>WARRANTY</th>
+              <th>RAM</th>
+              <th>ACTIVE</th>
+              <th>DEVICE IMAGE</th>
+              <th>APPROVAL PDF</th>
+              <th>PRINT QR CODE</th>
+          </tr>
+       </thead>
+
+      <tbody>
+          {% for product in instance %}
+          <tr>                          
+              <td>{{ product.product_name }}</td>
+              <td>{{ product.serial_no }}</td>
+              <td>{{ product.model_no }}</td>
+              <td>{{ product.mac_address }}</td>
+              <td>{{ product.device_type }}</td>
+              <td>{{ product.start_date }}&nbsp;&nbsp;<hr><br>{{product.end_date}}</td>
+              <td>{{ product.ram}}</td>
+              <td>{{ product.active }}</td>                         
+              <td><img src="/media/{{product.image}}" alt="img1" height="100" width="100"></td>
+              <td><a href="/media/{{product.appimage}}" target="_blank"><i class="fa fa-file-pdf-o" style="font-size:20px;color:red"></a></td>
+                {% if product.qrcode %}
+                  <td id="print-content">
+                     <img src="/media/{{product.qrcode}}" alt="img1" height="100" width="100"/>
+                     <a href="/media/{{product.qrcodepdf}}" target="_blank" ><i class="fa fa-file-pdf-o" style="font-size:20px;color:red"></i></a>
+                  </td>
+                {% endif %}                          
+          </tr>
+          {% empty %}
+            <p style="color: red">No history for this Product has been logged yet.</p>
+          {% endfor %}
+      </tbody>
+  </table>
+  {% include 'pagination.html' %}
+</div>
+{% include 'toggle.html' %}
+{% endblock content %}

@@ -1,0 +1,86 @@
+{% extends "index.html" %}
+{% block content %}
+{% load static %}
+
+<style type="text/css">
+  button.multiselect.dropdown-toggle.btn.btn-default
+  {
+    border: 1px solid grey
+  }
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+
+#mainForm{
+border: 3px solid #f1f1f1;width: 50%;margin-left: 25%;margin-right: 25%;
+}
+
+
+button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+
+.container {
+  padding: 16px;
+}
+
+@media screen and (max-width: 600px){
+#mainForm{
+  border: 3px solid #f1f1f1;width: 100%;margin-left:0;margin-right:0;
+
+
+}
+
+
+@media screen and (max-width: 300px) {
+ #mainForm span.psw {
+     display: block;
+     float: none;
+  }
+  #mainForm .cancelbtn {
+     width: 100%;
+  }
+}
+
+
+</style>
+
+
+   
+<h2 style="text-align: center;">Recover Product</h2>
+<form method='POST' action="/pdfrecoverprod/" id="mainForm">
+   {% csrf_token %}  
+    <div class='form-group'>
+      {% include 'messages.html' %}
+    </div>
+
+    <div class="container">
+       <input type="hidden" name="id" value="{{id}}">
+        <label for="cars">{{name}}</label>
+        <hr>
+        {% for i in emp %}
+        <div class="container">
+          <label for="cars"><input type="checkbox" name="product_id" value="{{i.product_id.serial_no}}">&nbsp;&nbsp;&nbsp;{{i.product_id.serial_no}}&nbsp;&nbsp;{{i.product_id.product_name}}</label>
+        </div>
+        {% endfor %}
+      <br>
+     <button class="btn btn-secondary"  type="submit">Approve</button>
+    </div>
+</form>
+
+
+
+{%endblock content%}

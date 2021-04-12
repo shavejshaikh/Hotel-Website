@@ -1,0 +1,34 @@
+{% extends "index.html" %}
+{% block content %}
+{% load static %}
+
+<link href="{% static '/css/employee.css' %}" rel="stylesheet">
+
+<h2 style="text-align: center;">Create User</h2>
+  <form method='POST' action="/giveusername/" id="mainForm">
+    <div class='form-group'>
+      {% include 'messages.html' %}  
+    </div>
+
+    <div class="container">
+        {% csrf_token %}  
+        <label for="uname"><b>Usernames</b></label>
+        <input type="text" name="username" placeholder="Username" required/>
+              
+        <label for="psw"><b>Password</b></label>
+        <input type="password" name="passw" placeholder="Password" required/>
+
+        <label for="cars">Choose a Employee:</label>
+        <select name="empid" class="form-control">
+            <option value="select">---------</option>
+           {% for i in emp %}
+              <option value="{{i.id}}">{{i.Employeeid}}&nbsp;&nbsp;&nbsp;{{i.first_name}}</option>
+           {% endfor %}
+        </select> 
+              
+        <button class="btn btn-secondary" type="submit">Provide</button>    
+    </div>
+  </form>
+
+
+{%endblock content%}

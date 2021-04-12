@@ -1,0 +1,45 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+
+  <style type="text/css">
+    th,td{
+      padding: 3px;
+    }
+
+    th{
+      background-color: black;
+      color: white;
+    }
+
+  </style>
+
+  </head>
+<body>
+  
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+              <h2><center>Product Report</center></h2>
+              <div class="tab-container">
+                {% for product in count %}
+                  <div id="my_side_tabs" class="tab-content side-tabs side-tabs-left">
+                      <div class="tab-pane fade in active" id="profile" role="tabpanel">
+                          <div class="col-sm-6" id="pro">
+                            <h3><b>{{forloop.counter}}. Product Info</b>{{product.serial_no.product_name}}&nbsp;{{product.serial_no.serial_no}}</h3>
+                             <p>Department  :&nbsp;&nbsp;{{ product.Department}}</p>
+                             <p>Issue Msg   :&nbsp;&nbsp;{{ product.issue }}</p>
+                             <p>Issue Date  :&nbsp;&nbsp;{{ product.issuedate }}</p>
+                             <p>Employee Name:&nbsp;{{ product.attended_by.first_name}}&nbsp;&nbsp;{{ product.attended_by.last_name}}</p>
+                             <p>Emp Remark  :{{product.solvedate}}</p>   
+                          </div>
+                      </div>
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

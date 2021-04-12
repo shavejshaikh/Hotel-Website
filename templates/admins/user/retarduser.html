@@ -1,0 +1,120 @@
+{% extends "index.html" %}
+{% block content %}
+{% load static %}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.min.css'>
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css'>
+
+<style>
+
+.multipleChosen, .multipleSelect2
+{
+  width: 300px;
+}
+
+button.multiselect.dropdown-toggle.btn.btn-default
+{
+  border: 1px solid grey
+}
+
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+
+#mainForm{
+border: 3px solid #f1f1f1;width: 50%;margin-left: 25%;margin-right: 25%;
+}
+
+
+.container input[type=text], input[type=password] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+.container {
+  padding: 16px;
+}
+
+@media screen and (max-width: 600px)
+{
+  #mainForm{
+  border: 3px solid #f1f1f1;width: 100%;margin-left:0;margin-right:0;
+  } 
+}
+
+
+
+@media screen and (max-width: 300px) 
+{
+  #mainForm span.psw {
+     display: block;
+     float: none;
+  }
+  #mainForm .cancelbtn {
+     width: 100%;
+  }
+}
+
+
+</style>
+
+
+   
+<h2 style="text-align: center;">Retard User</h2>
+    <form method='POST' action="/retarduser/" id="mainForm">
+
+        <div class='form-group'>
+          {% include 'messages.html' %}
+        </div>
+
+        <div class="container">
+          {% csrf_token %}  
+            <label>Choose a Employee to Deactivate:</label>
+              <select class="multipleChosen" name="empid" id='empid' multiple="true">
+                {% for i in emp %}
+                  <option value="{{i.id}}" required>{{i.Employeeid}}&nbsp;&nbsp;&nbsp;{{i.first_name}}</option>
+                {% endfor %}
+              </select> 
+            <br><br>
+           <button class="btn btn-secondary"  type="submit">Approve</button>          
+        </div>
+    </form>
+
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js'></script>
+
+<script>
+  
+  $(document).ready(function(){
+  $("#empid").chosen({
+      placeholder_text_multiple: "Choose Employee" //placeholder
+    });
+  })
+
+
+</script>
+
+
+{%endblock content%}

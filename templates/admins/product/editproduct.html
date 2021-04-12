@@ -1,0 +1,807 @@
+{% extends "index.html" %}
+{% block content %}
+{% load static %}
+
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+
+<style> 
+  @import url(https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css);
+  }
+@import url("https://fonts.googleapis.com/css?family=Roboto");
+
+.uploader {
+  display: block;
+  clear: both;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 600px;
+}
+.uploader label {
+  float: left;
+  clear: both;
+  width: 200px;
+  padding:1rem 1.1rem;
+  text-align: center;
+  background: #fff;
+  border-radius: 7px;
+  border: 3px solid #eee;
+  -webkit-transition: all .2s ease;
+  transition: all .2s ease;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+.uploader label:hover {
+  border-color: #454cad;
+}
+.uploader label.hover {
+  border: 3px solid #454cad;
+  box-shadow: inset 0 0 0 6px #eee;
+}
+.uploader label.hover #start i.fa {
+  -webkit-transform: scale(0.8);
+          transform: scale(0.8);
+  opacity: 0.3;
+}
+.uploader #start {
+  float: left;
+  clear: both;
+  width: 100%;
+}
+.uploader #start.hidden {
+  display: none;
+}
+.uploader #start i.fa {
+  font-size: 50px;
+  margin-bottom: 1rem;
+  -webkit-transition: all .2s ease-in-out;
+  transition: all .2s ease-in-out;
+}
+.uploader #response {
+  float: left;
+  clear: both;
+  width: 100%;
+}
+.uploader #response.hidden {
+  display: none;
+}
+.uploader #response #messages {
+  margin-bottom: .5rem;
+}
+.uploader #file-image {
+  display: inline;
+  margin: 0 auto .5rem auto;
+  width: auto;
+  height: auto;
+  max-width: 180px;
+}
+.uploader #file-image.hidden {
+  display: none;
+}
+.uploader #notimage {
+  display: block;
+  float: left;
+  clear: both;
+  width: 100%;
+}
+.uploader #notimage.hidden {
+  display: none;
+}
+.uploader progress,
+.uploader .progress {
+  display: inline;
+  clear: both;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 180px;
+  height: 8px;
+  border: 0;
+  border-radius: 4px;
+  background-color: #eee;
+  overflow: hidden;
+}
+.uploader .progress[value]::-webkit-progress-bar {
+  border-radius: 4px;
+  background-color: #eee;
+}
+.uploader .progress[value]::-webkit-progress-value {
+  background: -webkit-gradient(linear, left top, right top, from(#393f90), color-stop(50%, #454cad));
+  background: linear-gradient(to right, #393f90 0%, #454cad 50%);
+  border-radius: 4px;
+}
+.uploader .progress[value]::-moz-progress-bar {
+  background: linear-gradient(to right, #393f90 0%, #454cad 50%);
+  border-radius: 4px;
+}
+.uploader input[type="file"] {
+  display: none;
+}
+.uploader div {
+  margin: 0 0 .5rem 0;
+  color: #5f6982;
+}
+.uploader .btn {
+  display: inline-block;
+  margin: .5rem .5rem 1rem .5rem;
+  clear: both;
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 14px;
+  text-decoration: none;
+  text-transform: initial;
+  border: none;
+  border-radius: .2rem;
+  outline: none;
+  padding: 0 1rem;
+  height: 36px;
+  line-height: 36px;
+  color: #fff;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+  box-sizing: border-box;
+  background: #454cad;
+  border-color: #454cad;
+  cursor: pointer;
+}
+
+  textarea {
+    /*max-width: 100%;*/
+    width: 200px;
+  }
+  #label { 
+      width: 200px; 
+      float: left; 
+      margin-right: 3em;
+      /*margin: 0 20px 0 0;*/
+     }
+
+  span {
+      font-size: 1em;  
+    }
+
+  input { 
+    width: 200px;
+    }
+  .prime{
+    margin: 2% 3%;
+  }
+  .container{
+    min-height: 80vh;
+    background-color: #D9F0F0;
+  
+    padding: 2em 3em;
+    border-radius: 30px;
+    /*width: 80%;*/
+    /*margin-top: 1em;*/
+    /*border: 0.2rem outset #3473ad;*/
+    /*box-shadow: 3px 3px #dcdee0, -1em 0 0.4em #dcdee0;*/
+    /*outline-offset: 0.5rem;*/
+  }
+
+  .btn{
+    margin-right: 2em;
+    margin-top: 1.5em ;
+    width: 7em;
+   }
+  .image{
+    margin-top: 5em;
+    margin-right: 3em;
+  }
+
+*, *:after, *:before {
+  box-sizing: border-box;
+}
+
+@keyframes expand-button {
+  0% {
+    position: fixed;
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(15);
+  }
+  100% {
+    transform: scale(100);
+  }
+}
+@keyframes slow-opacity {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@keyframes show-input {
+  from {
+    opacity: 0;
+    width: 10%;
+  }
+  to {
+    opacity: 1;
+    width: 70%;
+  }
+}
+.expand {
+  left: 10px;
+  top: 10px;
+  animation: expand-button 0.6s ease-in;
+  position: fixed;
+  transform: scale(100);
+  z-index: 3;
+}
+.expand:hover {
+  background: #2196F3 !important;
+}
+.expand i {
+  animation: slow-opacity 0.3s;
+  opacity: 0;
+}
+
+.search {
+  padding: 10px;
+}
+
+.search .search-results, .search .search__input {
+  visibility: hidden;
+  display: none;
+  position: fixed;
+}
+.search .search__input {
+  top: 10px;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  width: 10%;
+  border: none;
+  border-radius: 5px;
+  padding: 0.8rem;
+  background: #064475;
+  color: white;
+  font-family: "Lato";
+  font-weight: bold;
+  font-size: 1rem;
+  z-index: 3;
+}
+.search .search__input::placeholder {
+  color: #39a1f4;
+}
+.search .search-results--show {
+  visibility: visible;
+  display: block;
+  width: 100%;
+  top: 70px;
+  text-align: center;
+  animation: show-input 0.3s;
+  z-index: 3;
+}
+.search .search-results--show li  {
+  width: 100%;
+  margin-left: -10px;
+}
+.search .search-results--show li div {
+  margin: 0 auto;
+  padding: 10px;
+  width: 70%;
+  height: 38px;
+  text-align: left;
+  font-family: "Lato";
+  color: #042844;
+}
+.search .search-results--show li div:hover, .search .search-results--show li div:focus {
+  background: #0c7cd5;
+  font-weight: bold;
+  cursor: pointer;
+}
+.search .search__input--show {
+  width: 10%;
+  visibility: visible;
+  display: inline;
+  opacity: 0;
+  animation: show-input 0.3s 0.6s ease-in forwards;
+
+}
+.search .search__button {
+  width: 50px;
+  height: 50px;
+  border: 0;
+  border-radius: 50%;
+  background: #2196F3;
+  outline:none;
+}
+.search .search__button:hover {
+  transition: background 0.3s ease;
+  background: #0c7cd5;
+}
+.search .search__button i {
+  font-size: 1.5rem;
+  color: #fff;
+  transition: opacity 600ms;
+}
+
+
+</style>
+
+
+
+<section class="search" id="myDIV" style="display: none;">
+    <button class="search__button"><i class="fa fa-search"></i></button>
+    <input type="text" id="search" placeholder="Search..." class="search__input" name="search" />
+    <ul class="search-results" id="search-results"></ul>   
+</section>
+
+<div class="container" id="allow">
+    {% include 'messages.html' %}
+    <div class="prime">
+        <div class="table-responsive">
+            <div style="float: right;" class="image row">
+<!-- <h4>File Upload & Image Preview</h2> -->
+
+<!-- Upload  -->
+<form id="file-upload-form" class="uploader" action="." method="POST" enctype="multipart/form-data">
+   {% csrf_token %}
+      <input id="file-upload" type="file" name="image" value="{{prod.image.url}}"/>
+        <label for="file-upload" id="file-drag">
+          <img id="file-image" src="#" alt="Preview" class="hidden">
+          <img src="/media/{{object.image}}" alt="img1" height="100" width="100">
+          <div id="start">
+            
+            <div>Select a file or drag here</div>
+            <div id="notimage" class="hidden">Please select an image</div>
+            <span id="file-upload-btn" class="btn btn-primary">Select a file</span>
+          </div>
+          <div id="response" class="hidden">
+            <div id="messages"></div>
+            <progress class="progress" id="file-progress" value="0">
+              <span>0</span>
+            </progress>
+          </div>
+        </label>
+      <!-- </form> -->
+      </div>
+  <!--   <form action="/addproduct" method="POST" enctype="multipart/form-data"> -->
+   
+      
+
+    <div style="width: 70%;float: left;">
+      <div class="row">
+        <div class="form-group col-sm-4 col-md-4">
+          <label for="make" id="label">
+            <span>Make:</span>
+              <input type="hidden" name="id" value="{{prod.id}}">
+              {{form.product_name}} {{form.product_name.errors}} 
+          </label>
+        </div>
+
+        <div class="form-group col-sm-4 col-md-4">
+          <label for="serial" id="label">
+            <span>Serial No:</span> 
+              {{form.serial_no}}{{ form.serial_no.errors }}
+          </label>
+        </div>
+        
+        <div class="form-group col-sm-4 col-md-4">
+        </div>
+          
+
+        <div class="form-group col-sm-4 col-md-4">
+          <label for="config" id="label">
+            <span>Device type:</span>
+              {{form.device_type}}{{ form.device_type.errors }}
+          </label>
+        </div>
+
+        <div class="form-group col-sm-4 col-md-4">
+          <label for="imei" id="label">
+            <span>IMEI No:</span>
+              {{form.IMEI}}{{ form.IMEI.errors }}
+            </label>
+        </div>
+        <div class="form-group col-sm-4 col-md-4">
+        </div>
+
+
+        <div class="form-group col-sm-4 col-md-4">
+          <label for="mdl" id="label">
+            <span>Model No:</span>
+              {{form.model_no}} {{ form.model_no.errors }}
+          </label>
+        </div>
+
+        <div class="form-group col-sm-4 col-md-4">
+          <label for="mac" id="label">
+            <span>Mac Address:</span>       
+              {{form.mac_address}}{{ form.mac_address.errors }}
+          </label>
+        </div>
+        <div class="form-group col-sm-4 col-md-4">
+        </div>
+
+        <div class="form-group col-sm-4 col-md-4">
+         <label for="disp" id="label">
+            <span>Display:</span>
+              {{form.display}}{{ form.display.errors }}
+          </label>
+        </div>
+
+        <div class="form-group col-sm-4 col-md-4">
+          <label for="proc" id="label">
+            <span>Processor:</span>
+              {{form.processor}}{{ form.processor.errors }}
+          </label>
+        </div>
+        <div class="form-group col-sm-4 col-md-4">
+        </div>
+
+        <div class="form-group col-sm-4 col-md-4">
+          <label for="hard" id="label">
+            <span>Hard Disc:</span>
+             {{form.harddisc}}{{ form.harddisc.errors }}
+          </label>
+        </div>
+
+        <div class="form-group col-sm-4 col-md-4">
+          <label for="purchase" id="label">
+            <span>RAM:</span>
+             {{form.ram}}{{ form.ram.errors }}
+          </label>
+        </div>
+        <div class="form-group col-sm-4 col-md-4">
+        </div>
+
+
+        <div class="form-group col-sm-4 col-md-4">
+          <label for="make" id="label">
+            <span>Start Date:</span>
+              {{form.start_date}}{{ form.start_date.errors }}
+          </label>
+        </div>
+
+        <div class="form-group col-sm-4 col-md-4">
+          <label for="serial" id="label">
+            <span>End Date:</span>
+              {{form.end_date}}{{ form.end_date.errors }}
+          </label>
+        </div>
+
+        <div class="form-group col-sm-4 col-md-4">
+        </div>    
+
+
+        <div class="form-group col-sm-4 col-md-4">
+         <label for="label" id="label">
+            <span>Active:</span>
+             {{form.active}}{{ form.active.errors }}
+          </label>
+        </div>
+
+        <div class="form-group col-sm-4 col-md-4">
+          <label for="purchase" id="label">
+            <span>Purchase Approval:</span>
+             <input class='form-control' type="file" id="myFile" name="appimage" value="{{prod.appimage}}">
+          </label>
+        </div>
+        
+          <div class="form-group col-sm-4 col-md-4">
+          </div>
+
+
+          <div class="form-group col-sm-4 col-md-4">
+            <label for="label" id="label">
+              <span>Remark:</span>
+                {{form.remark}}{{ form.remark.errors }}
+            </label>
+          </div>
+          <div class="form-group col-sm-4 col-md-4">
+            <label>
+              <a href="/media/{{prod.appimage}}" target="_blank" class="btn btn-success btn-download" id="download"><i class="fa fa-download"></i> PDF</a>
+            </label>  
+          </div>
+          <div class="form-group col-sm-4 col-md-4">
+          </div>
+         
+    {% if perms.engineer.Add_Products %}
+      <button type="submit" class="btn btn-success">SAVE</button>
+    {% endif %}
+    {% if perms.engineer.Delete_Products %}
+      <a href="/productDelete/{{object.id}}/" type="button" class="btn btn-danger" style="color: white">DELETE</a> 
+    {% endif %}
+    {% if perms.engineer.Edit_Products %}
+      <button type="button" class="btn btn-warning" onclick="myFunction1()">EDIT</button>
+    {% endif %}
+    </div>
+
+</form>
+</div>
+<!-- partial -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+  crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+  crossorigin="anonymous"></script>
+
+<script>
+function myFunction1() {
+  var x = document.getElementById("myDIV");
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+}
+</script>
+<script> 
+const listTest = [
+  'PHP','abcdefghijklmnopqrstuvwxyz','1234567890'
+];
+
+function addClassShow(elements) {
+  elements.forEach(classText => {
+    const element = document.querySelector('.' + classText);
+    if(element.className.search('--show') === -1) {
+      element.className = `${element.className} ${element.className}--show`;
+    }
+  });
+}
+
+function removeClassShow(elements) {
+  elements.forEach(classText => {
+    const element = document.querySelector('.' + classText);
+    element.className = element.className.replace(` ${classText}--show`, '');
+  });
+}
+
+// function serValueInput(val, e) {
+//   document.querySelector(".search__input").value = val.trim();
+// }
+
+const ele = document.querySelector(".search__button");
+
+ele.addEventListener("click", () => {
+  const input = document.querySelector(".search__input");
+  if(ele.className.search("expand") !== -1) {
+    ele.className = ele.className.replace(' expand', '');
+    removeClassShow(['search__input', 'search-results']);
+  } else {
+    ele.className = `${ele.className} expand`;
+    addClassShow(['search__input']);
+    input.focus();
+  }
+});
+
+const inputSearch = document.querySelector(".search__input");
+
+inputSearch.addEventListener("keyup", (e) => {
+  if (e.keyCode == 13 || e.keyCode == 40) {
+    const options = document.querySelector(".search-results li :first-child");
+    options.focus();
+    e.preventDefault();
+    return;
+  }
+  
+  const result = document.querySelector(".search-results");
+  const filterList = listTest.filter(x => x.toLowerCase().search(inputSearch.value.toLowerCase()) >= 0);
+  if (filterList.length >= 0 ) {
+    result.innerHTML = filterList.reduce((concat, item, index) => {
+      return `${concat}
+        <li>
+          <div tabindex="0" onkeypress="serValueInput(\'${item}\');" onclick="serValueInput(\'${item}\');">
+            ${item}
+          </div>
+        </li>`;
+    }, '');
+    addClassShow(['search-results']);
+  } else {
+    removeClassShow(['search-results']);
+  }
+});
+
+</script>
+
+
+
+ <script>
+ // File Upload
+function ekUpload(){
+  function Init() {
+
+    console.log("Upload Initialised");
+
+    var fileSelect    = document.getElementById('file-upload'),
+        fileDrag      = document.getElementById('file-drag'),
+        submitButton  = document.getElementById('submit-button');
+
+    fileSelect.addEventListener('change', fileSelectHandler, false);
+
+    // Is XHR2 available?
+    var xhr = new XMLHttpRequest();
+    if (xhr.upload) 
+    {
+      // File Drop
+      fileDrag.addEventListener('dragover', fileDragHover, false);
+      fileDrag.addEventListener('dragleave', fileDragHover, false);
+      fileDrag.addEventListener('drop', fileSelectHandler, false);
+    }
+  }
+
+  function fileDragHover(e) 
+  {
+    var fileDrag = document.getElementById('file-drag');
+
+    e.stopPropagation();
+    e.preventDefault();
+
+    fileDrag.className = (e.type === 'dragover' ? 'hover' : 'modal-body file-upload');
+  }
+
+  function fileSelectHandler(e) 
+  {
+    // Fetch FileList object
+    var files = e.target.files || e.dataTransfer.files;
+
+    // Cancel event and hover styling
+    fileDragHover(e);
+
+    // Process all File objects
+    for (var i = 0, f; f = files[i]; i++) {
+      parseFile(f);
+      uploadFile(f);
+    }
+  }
+
+  // Output
+  function output(msg) 
+  {
+    // Response
+    var m = document.getElementById('messages');
+    m.innerHTML = msg;
+  }
+
+  function parseFile(file) 
+  {
+
+    console.log(file.name);
+    output(
+      '<strong>' + encodeURI(file.name) + '</strong>'
+    );
+    
+    // var fileType = file.type;
+    // console.log(fileType);
+    var imageName = file.name;
+
+    var isGood = (/\.(?=gif|jpg|png|jpeg)/gi).test(imageName);
+    if (isGood) 
+    {
+      document.getElementById('start').classList.add("hidden");
+      document.getElementById('response').classList.remove("hidden");
+      document.getElementById('notimage').classList.add("hidden");
+      // Thumbnail Preview
+      document.getElementById('file-image').classList.remove("hidden");
+      document.getElementById('file-image').src = URL.createObjectURL(file);
+    }
+    else 
+    {
+      document.getElementById('file-image').classList.add("hidden");
+      document.getElementById('notimage').classList.remove("hidden");
+      document.getElementById('start').classList.remove("hidden");
+      document.getElementById('response').classList.add("hidden");
+      document.getElementById("file-upload-form").reset();
+    }
+  }
+
+  function setProgressMaxValue(e) 
+  {
+    var pBar = document.getElementById('file-progress');
+
+    if (e.lengthComputable) 
+    {
+      pBar.max = e.total;
+    }
+  }
+
+  function updateFileProgress(e) 
+  {
+    var pBar = document.getElementById('file-progress');
+
+    if (e.lengthComputable) 
+    {
+      pBar.value = e.loaded;
+    }
+  }
+
+  function uploadFile(file) 
+  {
+
+      var xhr  = new XMLHttpRequest(),
+      fileInput= document.getElementById('class-roster-file'),
+      pBar     = document.getElementById('file-progress'),
+      fileSizeLimit = 1024; // In MB
+
+    if (xhr.upload) 
+    {
+      // Check if file is less than x MB
+      if(file.size <= fileSizeLimit * 1024 * 1024)
+      {
+        // Progress bar
+        pBar.style.display = 'inline';
+        xhr.upload.addEventListener('loadstart', setProgressMaxValue, false);
+        xhr.upload.addEventListener('progress', updateFileProgress, false);
+
+        // File received / failed
+        xhr.onreadystatechange = function(e) 
+        {
+          if (xhr.readyState == 4) {
+            // Everything is good!
+
+            // progress.className = (xhr.status == 200 ? "success" : "failure");
+            // document.location.reload(true);
+          }
+        };
+
+        // Start upload
+        xhr.open('POST', document.getElementById('file-upload-form').action, true);
+        xhr.setRequestHeader('X-File-Name', file.name);
+        xhr.setRequestHeader('X-File-Size', file.size);
+        xhr.setRequestHeader('Content-Type', 'multipart/form-data');
+        xhr.send(file);
+      } 
+
+      else 
+      {
+        output('Please upload a smaller file (< ' + fileSizeLimit + ' MB).');
+      }
+    }
+  }
+
+  // Check for the various File API support.
+  if (window.File && window.FileList && window.FileReader) 
+  {
+    Init();
+  } 
+  else 
+  {
+    document.getElementById('file-drag').style.display = 'none';
+  }
+}
+ekUpload();
+</script>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+
+<script type="text/javascript">
+  
+$(function() 
+  {
+
+    $('#search').keyup(function() 
+    {
+      var search = $("#search").val();
+      console.log(search)
+        $.ajax({
+            type: "POST",
+            url: "/dynamicsearch/",
+            data: 
+            {
+                search_text : $('#search').val(),
+                csrfmiddlewaretoken : $("input[name=csrfmiddlewaretoken]").val()
+            },
+            success: searchSuccess,
+            dataType: 'html'
+        });
+    });
+});
+
+function searchSuccess(data, textStatus, jqXHR)
+{
+    console.log(textStatus)
+    $('#search-results').html(data)
+}
+</script>
+
+
+{%endblock content%}

@@ -1,0 +1,141 @@
+{% extends "index.html" %}
+{% block content %}
+{% load static %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+  .table-responsive {
+    display: block;
+    width: 90%;
+    margin-left: 5%;
+   overflow-x: inherit;
+ }
+  #target {
+  display:none;
+}
+.table{
+  width: auto;
+  float: left;
+  margin-right: 10%;
+
+}
+.tbs{
+  float: left;
+  width: auto;
+}
+th,td {
+  border: 0px;
+}
+.table-bordered thead th {
+    border-bottom-width: 0px;
+}
+.table thead th {
+    border-bottom: 0px solid #e3e6f0;
+}
+.table-bordered th {
+    border: 0px solid #e3e6f0;
+}
+.table-bordered thead td, .table-bordered thead th {
+    border-bottom-width: 0px;
+}
+.table-bordered td, .table-bordered th {
+    border: 0px solid #e3e6f0;
+}
+@media only screen and (max-width: 600px) {
+.table-responsive {overflow-x: auto;}
+}
+</style>
+
+<div class="table-responsive">
+  {% include 'messages.html' %}
+  <table class="table table-striped table-bordered">
+    <tbody>
+    {% for key in emp %}
+      <form action="/allowreplace/" method="POST">
+        {% csrf_token %}
+        <thead>
+          <tr>
+            <th>EMPLOYEE ID</th>
+            <td>{{ key.employee_id.Employeeid }}</td></tr>
+            <th>NAME</th>
+            <td>{{ key.employee_id.first_name }}&nbsp;&nbsp;{{ key.employee_id.last_name}}</td></tr>
+            <th>PRODUCT</th>
+            <td>{{ key.product_id}} <input type="hidden" name="emp" value="{{key.employee_id.id}}"><input type="hidden" name="pro" value="{{key.product_id.id}}"></td></tr>
+            <th>DESIGNATION</th>
+
+            <td>
+              <select name="newpro" id="proid" class="form-control" required>
+                <option value="select">---------</option>
+                {% for j in pro %}
+                 <option value="{{j.id}}" pname="{{j.product_name}}" sno="{{j.serial_no}}" mno="{{j.model_no}}" mac="{{j.mac_address}}" dis='{{j.display}}' pro='{{j.processor}}' ram='{{j.ram}}' hardware="{{j.harddisc}}" purchase='{{j.start_date}}' expiry='{{j.end_date}}'>{{j.serial_no}}&nbsp;&nbsp;&nbsp;{{j.product_name}}</option>
+                {% endfor %}
+              </select> 
+            </td>
+            
+          </tr>
+              <th></th>
+            <tr><td><button type="submit" class="btn btn-primary"><i class='fas fa-exchange-alt'></i> Replace</button></td></tr>
+        </thead>
+      </form>
+          <!-- </tr> -->
+    {% empty %}
+      <p style="color: red">No history for this User has been logged yet.</p>
+    {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="tbs">
+    <table>
+      <tr>
+        <th>Product Name</th> <td id="pname"></td> </tr>
+        <th>Serial No</th> <td id="sno"></td> </tr>
+        <th>Model No</th> <td id="mno"></td></tr>
+        <th>Mac address</th> <td id='mac'></td></tr>
+        <th>Display</th> <td id="dis"></td></tr>
+        <th>Processor</th> <td id="processor"></td></tr>
+        <th>Ram</th> <td id="ram"></td></tr>
+        <th>Hardware</th> <td id="hardware"></td></tr>
+        <th>IMEI</th> <td id="imei"></td></tr>
+        <th>Purchase Date</th> <td id='purchase'></td></tr>
+        <th>Expiry Date</th> <td id='expiry'></td></tr>
+      </tr>
+    </table>
+  </div>
+</div>
+
+  <script>
+    $("#proid").change(function() 
+    {
+      var Emp = $('option:selected', this);
+  // var pname = Emp.attr('pname');
+  // var sno = Emp.attr('sno');
+  // var mno = Emp.attr('mno');
+  // var mac = Emp.attr('mac');
+  // var dis = Emp.attr('dis');
+  // var processor =Emp.attr('pro');
+  // var ram =Emp.attr('ram');
+  // var hardware =Emp.attr('hardware');
+  // var imei =Emp.attr('imei');
+  // var purchase =Emp.attr('purchase');
+  // var expiry =Emp.attr('expiry');
+
+  // alert(sno)
+   document.getElementById("pname").innerHTML= Emp.attr('pname');
+   document.getElementById("sno").innerHTML  = Emp.attr('sno');
+   document.getElementById("mno").innerHTML  = Emp.attr('mno');
+   document.getElementById("mac").innerHTML  = Emp.attr('mac');
+   document.getElementById("dis").innerHTML  = Emp.attr('dis');
+
+   document.getElementById("processor").innerHTML= Emp.attr('pro');
+   document.getElementById("ram").innerHTML      = Emp.attr('ram');
+   document.getElementById("hardware").innerHTML = Emp.attr('hardware');
+   document.getElementById("imei").innerHTML     = Emp.attr('imei');
+   document.getElementById("purchase").innerHTML = Emp.attr('purchase');
+   document.getElementById("expiry").innerHTML   = Emp.attr('expiry');
+
+
+  console.log("Product name:", pname,"Serial No:",sno);
+});
+
+  </script>
+
+{%endblock content%}

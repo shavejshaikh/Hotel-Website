@@ -1,0 +1,88 @@
+{% extends "index.html" %}
+{% block content %}
+{% load static %}
+
+<link href="{% static '/css/call.css' %}" rel="stylesheet">
+
+<div class="container py-3" id="allow">
+    <div class="row">
+          <div class="col-md-12"> 
+                <div class="card card-outline-secondary">
+                      <div class="card-header">
+                        <h3 class="mb-0">{{model}} Permission to User</h3>
+                      </div>
+                      <div class="text-center mb-3">
+                          {% include 'messages.html' %}
+                      </div>
+
+                      <div class="card-body">
+                        <form method="POST" action=".">
+                          {% csrf_token %}
+                            <label for="cars">User:</label> <br>
+                            <select name="user_list" id='userid' class="form-control" onchange="Userload()">
+                              <option value="select">--------</option>
+                              {% for i in user %}
+                                <option value="{{i.id}}">{{i.username}}&nbsp;&nbsp;&nbsp;{{i.first_name}} {{i.last_name}}</option>
+                              {% endfor %}
+                            </select>
+                            <br><br>
+
+                            <table>
+                                <tr>
+                                    <th>Permission</th>
+                                    <th>Access</th>
+                                </tr>
+
+                                <div>
+                                  {% for permission in permissions %}
+                                      <tr class="item-row" class="form-control">
+                                          <td>
+                                              {{permission.name}}
+                                          </td>
+                                          <td>
+                                            <input type="checkbox" class='load_user' name="permission" value="{{permission.codename}}"
+                                                id='I-{{permission.id}}' />
+                                          </td>
+                                      </tr>
+                                  {% endfor %}
+                                  <input type="hidden" id="models" value="{{model}}">
+                                </div>
+                            </table>
+                            <button type="submit" class="form-control">Submit</button>
+                          </form>
+                      </div> <!-- Card body -->
+                </div><!-- /form contact -->
+          </div><!--/col-->
+    </div>
+</div><!--/col-->
+
+
+<script>
+  function Userload() 
+    {
+      var model  = document.getElementById('models').value;
+      var userid = document.getElementById('userid').value;
+      $('input[type=checkbox]').prop('checked', false);
+      $.ajax({                       // initialize an AJAX request
+        url: '/ajax/loadUserModel/', // set the url of the request /ajax/loadUserModel/)
+        data: {
+          'userid': userid,       // add the User id to the GET parameters
+          'models': model 
+        },
+        success: searchSuccess,  
+        dataType: 'json'
+      });
+    };
+
+    function searchSuccess(data, textStatus, jqXHR)
+    {
+      for(var i=0 ; i < data.length ; i++)
+      {
+        $("#I-" + data[i]).prop('checked', true);
+      }   
+    }
+
+</script>
+
+
+{%endblock content%}

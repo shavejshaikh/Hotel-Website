@@ -1,0 +1,15 @@
+{% extends "Usertemp/base.html" %}
+{% block content %}
+{% load static %}
+  <title>{% block title %}500{% endblock %}</title>
+
+    <div class="error-content">
+        <h1>500 PAGE</h1>
+        {% if user.is_authenticated %}
+        	<p>The page you are looking for does not exist.<br />Return to the <a href="/dashboard/">Home</a>.</p>
+        {% else %}
+        	<p>The page you are looking for does not exist.<br />Return to the <a href="/">Home</a>.</p>
+        {% endif %}
+    </div>
+        
+{% endblock content %}

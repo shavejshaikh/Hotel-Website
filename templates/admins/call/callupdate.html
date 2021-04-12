@@ -1,0 +1,51 @@
+{% extends "index.html" %}
+{% block content %}
+{% load static %}
+
+<link href="{% static '/css/call.css' %}" rel="stylesheet">
+<div class="container py-3">
+    <div class="row">
+          <div class="col-md-12"> 
+              <div class='form-group'>
+                {% include 'messages.html' %}
+              </div>
+              <div class="card card-outline-secondary">
+                    <div class="card-header">
+                      <h3 class="mb-0">Engineer Call</h3>  
+                    </div>
+
+                    <div class="card-body">
+                        <form autocomplete="off" class="form" role="form" action="/engineercall/" method='POST'>
+                            {% csrf_token %}
+                             <fieldset>
+                                <label class="mb-0" for="name2">Engineer</label>
+                                    <div class="row mb-1">
+                                        <div class="col-lg-12">
+                                          {{form.attended_by}} {{ form.attended_by.errors }}
+                                        </div>
+                                    </div>
+                            
+                                <label class="mb-0" for="email2">Call info</label>
+                                    <div class="row mb-1">
+                                        <div class="col-lg-12">
+                                          {{form.id}} {{ form.id.errors }}
+                                        </div>
+                                    </div>
+                                      
+                                <label class="mb-0" for="message2">Remarks:</label>
+                                    <div class="row mb-1">
+                                        <div class="col-lg-12">
+                                          {{form.remark}} {{ form.remark.errors }}
+                                        </div>
+                                    </div>
+                          
+                                <button class="btn btn-secondary btn-lg float-right" type="submit">Close Call</button>
+                            </fieldset> 
+                        </form> <!-- form -->
+                    </div> <!-- card body -->
+              </div><!-- card card -->
+          </div><!--/col-->
+    </div><!--/row-->
+</div><!--/container-->
+
+{%endblock content%}

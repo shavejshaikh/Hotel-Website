@@ -1,0 +1,286 @@
+{% extends "index.html" %}
+{% block content %}
+{% load static %}
+<!-- 
+    <title>Login</title> -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="shortcut icon" type="image/png" href="{% static 'img/ad.png' %}"/>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.min.css'>
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css'>
+<style>
+
+  .multipleChosen, .multipleSelect2{
+  width: 300px;
+}
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+
+#mainForm{
+border: 3px solid #f1f1f1;width: 50%;margin-left: 25%;margin-right: 25%;
+}
+
+button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+.cancelbtn {
+  width: auto;
+  padding: 10px 18px;
+  background-color: #f44336;
+}
+
+.imgcontainer {
+  text-align: center;
+  margin: 24px 0 12px 0;
+}
+
+/*img.avatar {
+  width: 40%;
+  border-radius: 50%;
+}
+*/
+.container {
+  padding: 16px;
+}
+
+span.psw {
+  float: right;
+  padding-top: 16px;
+}
+
+.multiselect-container>li>a>label {
+  padding: 4px 20px 3px 20px;
+}
+
+table, th, td {
+  border: 1px solid black;
+}
+
+/* Change styles for span and cancel button on extra small screens */
+@media screen and (max-width: 600px){
+#mainForm{
+  border: 3px solid #f1f1f1;width: 100%;margin-left:0;margin-right:0;
+}
+}
+
+
+@media screen and (max-width: 300px) {
+ #mainForm span.psw {
+     display: block;
+     float: none;
+  }
+  #mainForm .cancelbtn {
+     width: 100%;
+  }
+}
+
+@media screen and (max-width: 300px){
+  form {border: 3px solid #f1f1f1;
+    width: 100%;
+    margin-left: 0;
+    
+  }
+   #search{
+  float: none;
+  position: fixed;
+  top: 0;
+  left:20%;
+  width: 10%;
+  border:none;
+
+}
+#search input{
+  margin-left: 15px;
+  width: 200%;
+  border-radius: 7px;
+  padding: 5px 0px;
+  border: 2px solid #77ed77;
+}
+}
+
+
+@media screen and (max-width: 600px) {
+  .topnav a:not(:first-child) {display: none;}
+  .topnav a.icon {
+    float: right;
+    display: block;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .topnav.responsive {position: relative;}
+  .topnav.responsive .icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .topnav.responsive a {
+    float: none;
+    display: block;
+    text-align: left;
+  }
+  #search{
+  float: none;
+  position: fixed;
+  top: 0;
+  left:20%;
+  width: 20%;
+  border:none;
+
+}
+#search input{
+  border-radius: 7px;
+  padding: 5px 0px;
+  border: 2px solid #77ed77;
+}
+ 
+}
+
+
+</style>
+
+   
+<h2 style="text-align: center;">Assign Product</h2>
+<form method='POST' action="/giveproduct/" id="mainForm" onsubmit="return(prodValid())">
+    <div class='form-group'>
+        {% include 'messages.html' %}
+    </div>
+      
+    <div class="container">
+        {% csrf_token %}  
+        <label for="uname"><b>Employee Name</b></label>
+          <select name="empid" id="empid" class="form-control">
+            <option value="select" selected>---------</option>
+            {% for i in emp %}
+            <option value="{{i.id}}" fname="{{i.first_name}}" lname="{{i.last_name}}" desig='{{i.Designation}}' Dep='{{i.Department}}' empid22="{{i.Employeeid}}">{{i.Employeeid}}&nbsp;&nbsp;&nbsp;{{i.first_name}}</option>
+            {% endfor %}
+          </select> 
+        <br><br>
+        
+        <label for="psw"><b>Product</b></label>
+        <select class="multipleChosen form-control" id="proid" name="proid" multiple="true">
+          {% for j in pro %}
+            <option value="{{j.id}}" pname="{{j.product_name}}" sno="{{j.serial_no}}" mno="{{j.model_no}}" mac="{{j.mac_address}}" dis='{{j.display}}' pro='{{j.processor}}' ram='{{j.ram}}' hardware="{{j.harddisc}}" purchase='{{j.start_date}}' expiry='{{j.end_date}}'>{{j.serial_no}}&nbsp;&nbsp;&nbsp;{{j.product_name}}</option>
+          {% endfor %}
+        
+        </select> 
+    </div>
+
+    <button type="submit" class="btn btn-secondary">Approve</button>
+</form>
+
+
+  <div class='left' style="float: left; width: 45%;margin-left: 5%;">
+    <table>
+      <tr>
+        <th>Employee ID</th> <td id="ID">    </td></tr>
+        <th>Designation</th> <td id="desig"> </td></tr>
+        <th>Department </th> <td id="depart"></td></tr>
+        <th>First Name </th> <td id='fname'> </td></tr>
+        <th>Last Name  </th> <td id="lname"> </td></tr>
+      </tr>
+    </table>
+  
+  </div>
+
+
+  <div class='right' style="float: left; width: 45%;">
+    <table>
+      <tr>
+        <th>Product Name</th> <td id="pname"></td> </tr>
+        <th>Serial No</th> <td id="sno"></td> </tr>
+        <th>Model No</th> <td id="mno"></td></tr>
+        <th>Mac address</th> <td id='mac'></td></tr>
+        <th>Display</th> <td id="dis"></td></tr>
+        <th>Processor</th> <td id="processor"></td></tr>
+        <th>Ram</th> <td id="ram"></td></tr>
+        <th>Hardware</th> <td id="hardware"></td></tr>
+        <th>IMEI</th> <td id="imei"></td></tr>
+        <th>Purchase Date</th> <td id='purchase'></td></tr>
+        <th>Expiry Date</th> <td id='expiry'></td></tr>
+      </tr>
+    </table>
+  </div>
+
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js'></script>
+
+<script>
+  $(document).ready(function(){
+  $(".multipleChosen").chosen({
+      placeholder_text_multiple: "Choose Product" //placeholder
+    });
+  })
+
+
+$("#empid").change(function() {
+  var Employee = $('option:selected', this);
+   document.getElementById("fname").innerHTML = Employee.attr('fname');
+   document.getElementById("lname").innerHTML = Employee.attr('lname');
+   document.getElementById("depart").innerHTML= Employee.attr('Dep');
+   document.getElementById("desig").innerHTML = Employee.attr('Desig');
+   document.getElementById("ID").innerHTML    = Employee.attr('empid22');
+});
+
+
+$("#proid").change(function() {
+  var Emp = $('option:selected', this);
+
+   document.getElementById("pname").innerHTML= Emp.attr('pname');
+   document.getElementById("sno").innerHTML  = Emp.attr('sno');
+   document.getElementById("mno").innerHTML  = Emp.attr('mno');
+   document.getElementById("mac").innerHTML  = Emp.attr('mac');
+   document.getElementById("dis").innerHTML  = Emp.attr('dis');
+
+   document.getElementById("processor").innerHTML= Emp.attr('pro');
+   document.getElementById("ram").innerHTML      = Emp.attr('ram');
+   document.getElementById("hardware").innerHTML = Emp.attr('hardware');
+   document.getElementById("imei").innerHTML     = Emp.attr('imei');
+   document.getElementById("purchase").innerHTML = Emp.attr('purchase');
+   document.getElementById("expiry").innerHTML   = Emp.attr('expiry');
+
+
+  // console.log("Product name:", pname,"Serial No:",sno);
+});
+
+
+function prodValid()
+{
+  var dropemp = document.getElementById("empid").value;
+  var droppro = document.getElementById("proid").value;
+
+  if (dropemp === 'select')
+  {
+    alert("Select Employee Name");
+    return false;
+  }
+
+  if (droppro === "")
+  {
+    alert("Select Product");
+    return false;
+  }
+
+  return true;
+}
+
+
+</script>
+
+{%endblock content%}

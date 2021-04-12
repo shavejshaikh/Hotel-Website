@@ -1,0 +1,36 @@
+
+<div class="table-responsive">
+  <table class="table table-striped table-bordered table-sm" id="table_id">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>CHANGES</th>
+        <th>USER</th>
+        <th>PREV RECORD</th>
+        <th>NEXT RECORD</th>
+        <th>ACTION</th>
+        <th>DATE</th>
+      </tr>
+    </thead>
+
+    <tbody>
+    {% for i in query %}
+      <tr>
+        <td>{{ i.history_id}}</td>
+        <td>{{ i.history_object|default:"None" }}</td>
+        <td>{{ i.history_user_id |default:"None" }} {{ i.history_user|default:"None" }}</td>
+        <td>{{ i.prev_record | default:""}}</td>
+        <td>{{ i.next_record | default:""}}</td>
+        {% if i.history_type == '+' %}
+          <td>Created</td>
+        {% elif i.history_type == '~' %}
+          <td>Updated</td>
+        {% endif %}
+        <td>{{ i.history_date|default:"None" }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% include 'datatable.html' %} 
