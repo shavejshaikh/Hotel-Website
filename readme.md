@@ -10,7 +10,7 @@ The objective of Hotel website to manage hotel information i.e
 ## Installation
 Clone repository
 > git clone https://github.com/shavejshaikh/Hotel-Website.git
-<br>
+
 > cd Hotel-Website
 
 Install dependency from requirements.txt
@@ -18,10 +18,10 @@ Install dependency from requirements.txt
 
 Migrate database 
 > python3 manage.py makemigrations
-<br>
+
 > python3 manage.py migratez
 
 Run django application
 > python3 manage.py runserver
-<br>
+
 ![Home page](./readmeImg/home_page.png)
